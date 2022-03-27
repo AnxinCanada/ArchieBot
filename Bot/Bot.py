@@ -1,5 +1,8 @@
+import os
 import discord
 from discord.ext import commands
+
+os.chdir("TEMP")
 
 client = commands.Bot(command_prefix="!", help_command=None)
 
