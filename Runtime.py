@@ -21,6 +21,7 @@ async def update(ctx):
         await Client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SERVER REBOOT"))
         try:
             os.system("mv TEMP/assets assets")
+            os.system("rm -r TEMP")
         except Exception:
             pass
         os.system("svn checkout https://github.com/AnxinCanada/ArchieBot/trunk/Bot TEMP")
