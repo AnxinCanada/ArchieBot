@@ -5,7 +5,9 @@ from discord.ext import commands
 
 Client = commands.Bot(command_prefix="!", help_command=None)
 
-def update():
+@Client.command()
+async def reboot(ctx):
+        await Client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SERVER REBOOT"))
         try:
             os.system("mv 'TEMP/assets' 'assets'")
         except Exception:
@@ -19,13 +21,11 @@ def update():
             os.system("cp Bot/Login.TOKEN TEMP/Login.TOKEN")
         except Exception:
             pass
-        os.system("python3 Startup.py")
-        Client.close()
-        sys.exit()
+        os.system("python3 Runtime.py")
+        sys.exit(0)
 
 @Client.event
 async def on_ready():
-    await Client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SERVER REBOOT"))
-    update()
+    os.system("python3 TEMP/Bot.py")
 
 Client.run(open("Bot/Login.TOKEN").read())
