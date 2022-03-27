@@ -1,23 +1,17 @@
-import os,requests
-def download(url):
-    get_response = requests.get(url,stream=True)
-    file_name  = "_TEMP.py"
-    with open(file_name, 'wb') as f:
-        for chunk in get_response.iter_content(chunk_size=1024):
-            if chunk: # filter out keep-alive new chunks
-                f.write(chunk)
-
-
-download("https://raw.githubusercontent.com/AnxinCanada/ArchieBot/main/Bot/Bot.py")
-
-
-from time import sleep
 import os
 import discord
-import requests
-import shutil
+import subprocess
+from discord.ext import commands
 
-def update():
+Client = commands.Bot(command_prefix="!", help_command=None)
+
+@Client.command(aliases=["reboot", "restart"])
+async def update(ctx):
+    try:
+        p.terminate()
+    except Exception:
+        pass
+    await Client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="SERVER REBOOT"))
     try:
         os.system("mv TEMP/assets assets")
     except Exception:
@@ -27,4 +21,14 @@ def update():
         os.system("mv assets TEMP/assets")
     except Exception:
         pass
-update()
+    try:
+        os.system("cp Bot/Login.TOKEN TEMP/Login.TOKEN")
+    except Exception:
+        pass
+    p = subprocess.Popen(['python', 'TEMP/Bot.py'])
+
+@Client.event
+async def on_ready():
+    await update(Client.get_guild(957246253157191711).get_channel(957258191459213322))
+
+Client.run(open("Bot/Login.TOKEN").read())
